@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>TextForm.qml</file>
+        <file>ButtonUniversal.qml</file>
+        <file>MessagePanel.qml</file>
+        <file>Chat.qml</file>
+        <file>Authorized.qml</file>
+        <file>Interlocutor.qml</file>
+    </qresource>
+</RCC>

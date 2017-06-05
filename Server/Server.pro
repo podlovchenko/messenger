@@ -1,17 +1,15 @@
-QT += core
+QT += core sql
 QT -= gui
-
-TARGET = MyTcpClient
+QT += network
+TARGET = Server
 CONFIG += console
 CONFIG -= app_bundle
 
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    mytcpclient.cpp
+    mytcpserver.cpp
 
 HEADERS += \
-    mytcpclient.h
-
-QT += network
+    mytcpserver.h
 
