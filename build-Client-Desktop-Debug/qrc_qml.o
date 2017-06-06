@@ -17,7 +17,7 @@ Item
         text: "Send"
         onClicked:
         {
-            extern_client.sendString(extern_client.file, 100);
+            extern_client.sendFile( extern_client.getFile() );
         }
     }
 

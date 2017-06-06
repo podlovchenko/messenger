@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MyTcpClient_t {
-    QByteArrayData data[18];
-    char stringdata0[207];
+    QByteArrayData data[21];
+    char stringdata0[229];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,7 +46,10 @@ QT_MOC_LITERAL(13, 149, 7), // "setName"
 QT_MOC_LITERAL(14, 157, 15), // "getInterlocutor"
 QT_MOC_LITERAL(15, 173, 15), // "setInterlocutor"
 QT_MOC_LITERAL(16, 189, 12), // "verification"
-QT_MOC_LITERAL(17, 202, 4) // "name"
+QT_MOC_LITERAL(17, 202, 4), // "name"
+QT_MOC_LITERAL(18, 207, 8), // "sendFile"
+QT_MOC_LITERAL(19, 216, 4), // "path"
+QT_MOC_LITERAL(20, 221, 7) // "getFile"
 
     },
     "MyTcpClient\0messageRecieve\0\0message\0"
@@ -54,7 +57,8 @@ QT_MOC_LITERAL(17, 202, 4) // "name"
     "clientDisconnected\0currentInterlocutor\0"
     "interlocutor\0clearChat\0slotRead\0"
     "sendString\0setName\0getInterlocutor\0"
-    "setInterlocutor\0verification\0name"
+    "setInterlocutor\0verification\0name\0"
+    "sendFile\0path\0getFile"
 };
 #undef QT_MOC_LITERAL
 
@@ -64,7 +68,7 @@ static const uint qt_meta_data_MyTcpClient[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -72,19 +76,21 @@ static const uint qt_meta_data_MyTcpClient[] = {
        5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   69,    2, 0x06 /* Public */,
-       5,    1,   74,    2, 0x06 /* Public */,
-       7,    1,   77,    2, 0x06 /* Public */,
-       8,    1,   80,    2, 0x06 /* Public */,
-      10,    0,   83,    2, 0x06 /* Public */,
+       1,    2,   79,    2, 0x06 /* Public */,
+       5,    1,   84,    2, 0x06 /* Public */,
+       7,    1,   87,    2, 0x06 /* Public */,
+       8,    1,   90,    2, 0x06 /* Public */,
+      10,    0,   93,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    0,   84,    2, 0x0a /* Public */,
-      12,    2,   85,    2, 0x0a /* Public */,
-      13,    1,   90,    2, 0x0a /* Public */,
-      14,    0,   93,    2, 0x0a /* Public */,
-      15,    1,   94,    2, 0x0a /* Public */,
-      16,    1,   97,    2, 0x0a /* Public */,
+      11,    0,   94,    2, 0x0a /* Public */,
+      12,    2,   95,    2, 0x0a /* Public */,
+      13,    1,  100,    2, 0x0a /* Public */,
+      14,    0,  103,    2, 0x0a /* Public */,
+      15,    1,  104,    2, 0x0a /* Public */,
+      16,    1,  107,    2, 0x0a /* Public */,
+      18,    1,  110,    2, 0x0a /* Public */,
+      20,    0,  113,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::Bool,    3,    4,
@@ -100,6 +106,8 @@ static const uint qt_meta_data_MyTcpClient[] = {
     QMetaType::QString,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Bool, QMetaType::QString,   17,
+    QMetaType::Void, QMetaType::QString,   19,
+    QMetaType::QString,
 
        0        // eod
 };
@@ -123,6 +131,9 @@ void MyTcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 9: _t->setInterlocutor((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 10: { bool _r = _t->verification((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 11: _t->sendFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 12: { QString _r = _t->getFile();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = _r; }  break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -186,13 +197,13 @@ int MyTcpClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 13)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }

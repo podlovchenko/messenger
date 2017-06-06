@@ -17,7 +17,7 @@ class MyTcpClient : public QObject
 public:
     explicit MyTcpClient(QObject *parent = 0);
 
-    QString file; // путь к файлу
+    QString file;
 public slots:
     void slotRead();
     void sendString(const QString&, int);
@@ -25,6 +25,8 @@ public slots:
     QString getInterlocutor(void);
     void setInterlocutor(QString);
     bool verification(QString name);
+    void sendFile(QString path);
+    QString getFile(void);
 private:
     QTcpSocket* mTcpSocket;
     QString name;

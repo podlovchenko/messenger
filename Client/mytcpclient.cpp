@@ -8,6 +8,18 @@ MyTcpClient::MyTcpClient(QObject *parent) : QObject(parent)
     qDebug() << "client is started";
     connect(mTcpSocket, SIGNAL(readyRead()),this,  SLOT(slotRead()));
     countOfNewMessange = 0;
+
+    file = "lala"; // ЗДЕСЬ задается путь к передаваемому файлу
+}
+
+void MyTcpClient::sendFile(QString path)
+{
+    qDebug() << path;
+}
+
+QString MyTcpClient::getFile(void)
+{
+    return file;
 }
 
 void MyTcpClient::slotRead() // читаем сообщение от сервера
