@@ -133,12 +133,16 @@ void MyTcpClient::setName(QString client_name)
 
 void MyTcpClient::setInterlocutor(QString client_name)
 {
-    emit currentInterlocutor(interlocutor);
+    emit currentInterlocutor(interlocutor); // смена фокуса на собеседника
 
-    if ( interlocutor!= client_name)   // удаление старого чата изменившего собеседника
-        emit clearChat();
+    emit clearChat();   // удаление старого чата изменившего собеседника
 
     interlocutor = client_name;   
+}
+
+QString MyTcpClient::getInterlocutor(void)
+{
+    return interlocutor;
 }
 
 bool MyTcpClient::verification(QString name)

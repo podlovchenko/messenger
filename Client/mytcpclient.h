@@ -22,6 +22,7 @@ public slots:
     void slotRead();
     void sendString(const QString&, int);
     void setName(QString);
+    QString getInterlocutor(void);
     void setInterlocutor(QString);
     bool verification(QString name);
 private:

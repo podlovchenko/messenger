@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MyTcpClient_t {
-    QByteArrayData data[17];
-    char stringdata0[191];
+    QByteArrayData data[18];
+    char stringdata0[207];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,17 +43,18 @@ QT_MOC_LITERAL(10, 119, 9), // "clearChat"
 QT_MOC_LITERAL(11, 129, 8), // "slotRead"
 QT_MOC_LITERAL(12, 138, 10), // "sendString"
 QT_MOC_LITERAL(13, 149, 7), // "setName"
-QT_MOC_LITERAL(14, 157, 15), // "setInterlocutor"
-QT_MOC_LITERAL(15, 173, 12), // "verification"
-QT_MOC_LITERAL(16, 186, 4) // "name"
+QT_MOC_LITERAL(14, 157, 15), // "getInterlocutor"
+QT_MOC_LITERAL(15, 173, 15), // "setInterlocutor"
+QT_MOC_LITERAL(16, 189, 12), // "verification"
+QT_MOC_LITERAL(17, 202, 4) // "name"
 
     },
     "MyTcpClient\0messageRecieve\0\0message\0"
     "flag\0newClientConnected\0client\0"
     "clientDisconnected\0currentInterlocutor\0"
     "interlocutor\0clearChat\0slotRead\0"
-    "sendString\0setName\0setInterlocutor\0"
-    "verification\0name"
+    "sendString\0setName\0getInterlocutor\0"
+    "setInterlocutor\0verification\0name"
 };
 #undef QT_MOC_LITERAL
 
@@ -63,7 +64,7 @@ static const uint qt_meta_data_MyTcpClient[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -71,18 +72,19 @@ static const uint qt_meta_data_MyTcpClient[] = {
        5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   64,    2, 0x06 /* Public */,
-       5,    1,   69,    2, 0x06 /* Public */,
-       7,    1,   72,    2, 0x06 /* Public */,
-       8,    1,   75,    2, 0x06 /* Public */,
-      10,    0,   78,    2, 0x06 /* Public */,
+       1,    2,   69,    2, 0x06 /* Public */,
+       5,    1,   74,    2, 0x06 /* Public */,
+       7,    1,   77,    2, 0x06 /* Public */,
+       8,    1,   80,    2, 0x06 /* Public */,
+      10,    0,   83,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    0,   79,    2, 0x0a /* Public */,
-      12,    2,   80,    2, 0x0a /* Public */,
-      13,    1,   85,    2, 0x0a /* Public */,
-      14,    1,   88,    2, 0x0a /* Public */,
-      15,    1,   91,    2, 0x0a /* Public */,
+      11,    0,   84,    2, 0x0a /* Public */,
+      12,    2,   85,    2, 0x0a /* Public */,
+      13,    1,   90,    2, 0x0a /* Public */,
+      14,    0,   93,    2, 0x0a /* Public */,
+      15,    1,   94,    2, 0x0a /* Public */,
+      16,    1,   97,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::Bool,    3,    4,
@@ -95,8 +97,9 @@ static const uint qt_meta_data_MyTcpClient[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::QString,
     QMetaType::Void, QMetaType::QString,    2,
-    QMetaType::Bool, QMetaType::QString,   16,
+    QMetaType::Bool, QMetaType::QString,   17,
 
        0        // eod
 };
@@ -115,8 +118,10 @@ void MyTcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 5: _t->slotRead(); break;
         case 6: _t->sendString((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 7: _t->setName((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 8: _t->setInterlocutor((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 9: { bool _r = _t->verification((*reinterpret_cast< QString(*)>(_a[1])));
+        case 8: { QString _r = _t->getInterlocutor();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = _r; }  break;
+        case 9: _t->setInterlocutor((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 10: { bool _r = _t->verification((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
         default: ;
         }
@@ -181,13 +186,13 @@ int MyTcpClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 11)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 10;
+        _id -= 11;
     }
     return _id;
 }

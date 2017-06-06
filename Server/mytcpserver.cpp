@@ -22,8 +22,9 @@ MyTcpServer::MyTcpServer(QObject *parent, int port) : QObject(parent)
     {
         qDebug() << "server is started";
     }
+
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/home/seva/tmp/Messenger/history.db3");
+    db.setDatabaseName("../history.db3");
     db.open();
 }
 
@@ -47,24 +48,26 @@ void MyTcpServer::sendString(QTcpSocket* clientReceiver,const QString& str, int 
         return;
 
     QByteArray block;
-    QDataStream sendStream(&block, QIODevice::ReadWrite);
+    QDataStream stream(&block, QIODevice::ReadWrite);
+
     if ( type != -1)
     {
-        sendStream << quint16(0) << quint16(0) << str; // отправляем тип и размер сообщения, сын
-        sendStream.device()->seek(0);
-        sendStream << (quint16) (type) << (quint16)(block.size() - 2 * sizeof(quint16));
+        stream << quint16(0) << quint16(0) << str; // отправляем тип и размер сообщения, сын
+        stream.device()->seek(0);
+        stream << (quint16) (type) << (quint16)(block.size() - 2 * sizeof(quint16));
     }
+
     else    // при type == -1 передача сообщения производиться без типа
     {
-        sendStream << quint16(0) << str; // отправляем тип и размер сообщения
-        sendStream.device()->seek(0);
-        sendStream  << (quint16)(block.size() - sizeof(quint16));
+        stream << quint16(0) << str; // отправляем тип и размер сообщения
+        stream.device()->seek(0);
+        stream  << (quint16)(block.size() - sizeof(quint16));
     }
 
     clientReceiver->write(block);
 }
 
-QHash<QString, QTcpSocket*>::iterator MyTcpServer::nameClient(QTcpSocket* client)
+QHash<QString, QTcpSocket*>::iterator MyTcpServer::nameClient(QTcpSocket* client)   // запись таблицы клиента с сокетом client
 {
     for(QHash<QString, QTcpSocket*>::iterator allClients = clients.begin(); allClients != clients.end(); allClients++)
         if ( allClients.value() == client)   // нашли клиента
@@ -79,7 +82,7 @@ void MyTcpServer::clientDisconnected()
 
     for(QHash<QString, QTcpSocket*>::iterator allClients = clients.begin(); allClients != clients.end(); allClients++)
     {
-        sendString(allClients.value(),key,3);  // удаляем у всех клиентов иконку удаленного
+        sendString(allClients.value(),key,3);  // удаляем у всех клиентов иконку отключенного
     }
 }
 
@@ -129,6 +132,7 @@ void MyTcpServer::slotRead() // считать сообщение от клие�
                 sendString(interlocutors.value(name),buff,10); // сообщение в чате от собеседника
 
             sendString(pClientSocket,buff,0); // напечатать это же сообщение у себя в чате
+
             query.addBindValue(buff);
             query.exec();
         }

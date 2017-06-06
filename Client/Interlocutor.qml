@@ -37,9 +37,13 @@ Rectangle
                 height: 20
                 onClicked:
                 {
-                    extern_client.setInterlocutor(name); // имя собеседника
-                    extern_client.sendString(name,2);                 
-                    nonactiveColor = "red"
+                    if ( name !=  extern_client.getInterlocutor() )
+                    {
+                        extern_client.setInterlocutor(name); // имя собеседника
+                        extern_client.sendString(name,2);
+                        nonactiveColor = "red"
+                    }
+
                 }
             }
 
