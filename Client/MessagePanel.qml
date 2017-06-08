@@ -1,9 +1,11 @@
-import QtQuick 2.0
+import QtQuick 2.2
+import QtQuick.Dialogs 1.0
 
 Item
 {
-    id: bottomPanel
+    id: root
     anchors.fill: parent
+    property bool  choose: false
     ButtonUniversal
     {
         id: addFiles
@@ -13,11 +15,35 @@ Item
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         nonactiveColor: "red"
-
+        visible: root.choose ? false : true
         text: "Send"
+
         onClicked:
         {
-            extern_client.sendFile( extern_client.getFile() );
+            extern_client.sendFile("/home/seva/Pictures/qtcreator.png");
+            root.choose = true;
+        }
+    }
+
+    FileDialog
+    {
+        id: file
+        visible: root.choose ? true : false
+        title: "Please choose a file"
+        folder: shortcuts.home
+        width: parent.width
+        height: parent.height
+        onAccepted:
+        {
+            extern_client.sendFile(file.fileUrls);
+            close();
+            root.choose = false;
+        }
+
+        onRejected:
+        {
+            close();
+            root.choose = false;
         }
     }
 
@@ -35,6 +61,7 @@ Item
             id: message
             anchors.fill: parent
             placeHolder: "your mind..."
+            textTitle: 1
         }
     }
 

@@ -15,6 +15,7 @@ Rectangle
         width: parent.width / 4
         height: parent.height / 16
         placeHolder: "enter your name"
+        textTitle: 0
     }
 
     ButtonUniversal
@@ -26,16 +27,18 @@ Rectangle
         anchors.right: name.right
         text: "Authorized"
         onClicked:
-        {
-            // сделать проверку корректности имени: не пустое, не повторяющееся
+        {           
             if ( extern_client.verification(name.value) === true )
             {
                 extern_client.setName(name.value);
+                root.title = name.value;
                 extern_client.sendString(name.value, 1);
                 name.value = " ";
                 name.focus = false;
                 root.authorized = true;
             }
+            else
+                name.placeHolder = "Sorry, uncorrect name";
 
         }
     }

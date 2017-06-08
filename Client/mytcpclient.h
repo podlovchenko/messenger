@@ -9,38 +9,60 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QString>
-#include <string>
+#include <QFile>
+#include <QFileInfo>
+
+const size_t MESSAGE_TEXT_TO = 0;
+const size_t MESSAGE_TEXT_FROM = 10;
+const size_t MESSAGE_FILE = 200;
+const size_t SEVERAL_MESSAGES = 25;
+
+const size_t NAME_CLIENT = 1;
+const size_t NAME_INTERLOCUTOR = 2;
+const size_t DEL_INTERLOCUTOR = 3;
+
+
 
 class MyTcpClient : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
+
 public:
-    explicit MyTcpClient(QObject *parent = 0);
+    explicit MyTcpClient(QObject *parent = 0,size_t port = 6000);
 
-    QString file;
+
+    void readSeveralMessages(QDataStream&);
+    void saveFile(QDataStream &stream);
+    void clientOff(void);
+
 public slots:
-    void slotRead();
-    void sendString(const QString&, int);
-    void setName(QString);
-    QString getInterlocutor(void);
-    void setInterlocutor(QString);
-    bool verification(QString name);
-    void sendFile(QString path);
-    QString getFile(void);
-private:
-    QTcpSocket* mTcpSocket;
-    QString name;
-    QString interlocutor;
+	void slotRead();
+	void sendString(const QString&, int);
 
-    size_t countOfNewMessange;
-    void readHistoryChat(QDataStream&);
+	bool verification(QString name);
+    void sendFile(QString);
+
+
+    QString getInterlocutor(void);
+    QString getName(void);
+
+    void setInterlocutor(QString);
+    void setName(QString);
+
+private:
+	QTcpSocket* mTcpSocket;
+	QString name;
+	QString interlocutor;
+
+
 signals:
-    void messageRecieve(QString message, bool flag);
-    void newClientConnected(QString client);
-    void clientDisconnected(QString client);
-    void currentInterlocutor(QString interlocutor);
-    void clearChat();
+	void messageRecieve(QString message, bool flag);
+	void newClientConnected(QString client);
+	void clientDisconnected(QString client);
+	void currentInterlocutor(QString interlocutor);
+	void clearChat();
+    void end();
 };
-// кому отправляем
+
 #endif // MYTCPCLIENT
 

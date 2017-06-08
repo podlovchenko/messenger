@@ -1,5 +1,5 @@
-import QtQuick 2.3//7
-//import QtQuick.Controls 2.1
+import QtQuick 2.7
+import QtQuick.Controls 2.1
 
 FocusScope
 {
@@ -11,6 +11,7 @@ FocusScope
     property alias  value        : textInput.text;
     property alias  placeHolder  : typeSomething.text;
 
+    property int textTitle: 1
 
     Rectangle
     {
@@ -31,22 +32,30 @@ FocusScope
         anchors.fill: parent
         focus: true
 
-        /*TextArea.flickable:*/ TextEdit//Area
+        TextArea.flickable: TextArea
             {
                 id: textInput
                 focus: true
                 font.pointSize: 10;
                 wrapMode: TextEdit.Wrap
                 selectByMouse: true
-                anchors.fill: parent
-                anchors.margins: 5
+
+                Component.onCompleted:
+                {
+                        if ( focusScope.textTitle === 0)
+                        {
+                            textInput.font.bold = true;
+                            textInput.verticalAlignment   = TextInput.AlignVCenter;
+                            textInput.horizontalAlignment = TextInput.AlignHCenter;
+                        }
+                }
 
             }
 
-//        ScrollBar.vertical: ScrollBar
-//        {
-//            id : scrollBar
-//        }
+        ScrollBar.vertical: ScrollBar
+        {
+            id : scrollBar
+        }
     }
 
     Text
@@ -97,13 +106,20 @@ FocusScope
         {
             right: parent.right;
             bottom: parent.bottom;
-            //margins: 5;
         }
 
         Component.onCompleted:
         {
-            clear.anchors.margins = 0;
-            clear.font.pixelSize= 20;
+                if ( focusScope.textTitle === 0)
+                {
+                    clear.anchors.margins = 0;
+                    clear.font.pixelSize= 20;
+                }
+                else if ( focusScope.textTitle === 1 )
+                {
+                    clear.anchors.margins = 5;
+                    clear.font.pixelSize= 30;
+                }
         }
 
         Behavior on opacity { NumberAnimation { duration: 300; } } // изменение
@@ -115,9 +131,10 @@ FocusScope
             {
                 focusScope.value = "";
                 focusScope.focus = false;
+                if ( focusScope.placeHolder === "Sorry, uncorrect name")
+                    focusScope.placeHolder = "enter your name";
             }
         }
-
     }
 
 }

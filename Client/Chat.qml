@@ -4,7 +4,7 @@ Item
 {
     id: root
 
-    // ListView для представления данных в виде списка
+
     ListView
     {
         id: listView1      

@@ -1,15 +1,14 @@
-import QtQuick 2.3
-import QtQuick.Window 2.2
-//import QtQuick 2.7
-//import QtQuick.Controls 2.1
+import QtQuick 2.7
+import QtQuick.Controls 2.1
 
-Window
+ApplicationWindow
 {
     id: root
     visible: true
     width: 640
     height: 480
     color: "black"
+    title: "telegram v. 2.0"
     property bool  authorized: false
 
     Authorized
@@ -58,13 +57,19 @@ Window
                 id: bottomPanel
                 anchors.fill: parent
             }
-
-
         }
     }
 
+    Connections
+    {
+        target: extern_client
 
+        onEnd:
+        {
+            Qt.quit();
+        }
 
+    }
 
 }
 

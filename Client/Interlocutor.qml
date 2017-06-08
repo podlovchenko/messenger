@@ -7,7 +7,7 @@ Rectangle
     height: 480
     color: "#FFA07A"
 
-    // ListView для представления данных в виде списка
+
     ListView
     {
         id: listView1
@@ -37,7 +37,7 @@ Rectangle
                 height: 20
                 onClicked:
                 {
-                    if ( name !=  extern_client.getInterlocutor() )
+                    if ( name !==  extern_client.getInterlocutor() )
                     {
                         extern_client.setInterlocutor(name); // имя собеседника
                         extern_client.sendString(name,2);
