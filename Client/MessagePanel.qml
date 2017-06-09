@@ -20,7 +20,7 @@ Item
 
         onClicked:
         {
-            extern_client.sendFile("/home/seva/Pictures/qtcreator.png");
+            //extern_client.sendFile("/home/seva/Pictures/qtcreator.png");
             root.choose = true;
         }
     }

@@ -16,6 +16,7 @@
 const size_t MESSAGE_TEXT_TO = 0;
 const size_t MESSAGE_TEXT_FROM = 10;
 const size_t MESSAGE_FILE = 200;
+const size_t RAW_FILE = 201;
 const size_t SEVERAL_MESSAGES = 25;
 
 const size_t NAME_CLIENT = 1;
@@ -27,14 +28,24 @@ const size_t DEL_INTERLOCUTOR = 3;
 class MyTcpServer : public QObject
 {
 	Q_OBJECT
+
 public:
 	explicit MyTcpServer(QObject *parent = 0, int port = 6000);
 	~MyTcpServer();
-	public slots:
-	void slotNewConnection();
 
+    void addClient(QTcpSocket*, QString);
+    void whomToSend(QTcpSocket*, QString);
+    void showAllClients(QTcpSocket*, QString);
+    void sendHistory(QTcpSocket*, QTcpSocket*);
+    QHash<QString, QTcpSocket*>::iterator nameClient(QTcpSocket*);
+    void sendFile(QDataStream& stream, QTcpSocket*);
+    void saveFile(QDataStream& stream,int);
+public slots:
+	void slotNewConnection();
+    void clientDisconnected();
 	void slotRead();
 	void sendString(QTcpSocket*, const QString&, int);
+
 
 private:
 	QTcpServer* mTcpServer;
@@ -44,13 +55,6 @@ private:
 
 	QHash<QString, QTcpSocket*> interlocutors;
 
-	void addClient(QTcpSocket*, QString);
-	void whomToSend(QTcpSocket*, QString);
-	void showAllClients(QTcpSocket*, QString);
-	void clientDisconnected();
-	void sendHistory(QTcpSocket*, QTcpSocket*);
-	QHash<QString, QTcpSocket*>::iterator nameClient(QTcpSocket*);
-	void receiveFile(QDataStream &stream, QTcpSocket*);
 };
 
 #endif // MYTCPSERVER

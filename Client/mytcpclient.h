@@ -14,8 +14,9 @@
 
 const size_t MESSAGE_TEXT_TO = 0;
 const size_t MESSAGE_TEXT_FROM = 10;
-const size_t MESSAGE_FILE = 200;
 const size_t SEVERAL_MESSAGES = 25;
+const size_t MESSAGE_FILE = 200;
+const size_t RAW_FILE = 201;
 
 const size_t NAME_CLIENT = 1;
 const size_t NAME_INTERLOCUTOR = 2;

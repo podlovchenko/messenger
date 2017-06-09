@@ -9,7 +9,6 @@ MyTcpClient::MyTcpClient(QObject *parent,size_t port) : QObject(parent)
     connect(mTcpSocket, &QTcpSocket::disconnected, this, &MyTcpClient::clientOff); // клиент отключился
 }
 
-
 void MyTcpClient::clientOff(void)
 {
     delete mTcpSocket;
@@ -153,19 +152,22 @@ void MyTcpClient::sendFile(QString path)
     {
         QByteArray block;
         QDataStream sendStream(&block, QIODevice::WriteOnly);
-        quint16 size = file->size();
-        sendStream << quint16(MESSAGE_FILE) << QFileInfo(file->fileName()).fileName() << quint16(size);
-        // type, name, size
-        char buff[1024];
-        quint16 toFile;
+        quint32 size = file->size();
+        sendStream << quint16(MESSAGE_FILE)<< quint32(size) << QFileInfo(file->fileName()).fileName();
+        mTcpSocket->write(block); // send size, name
+        mTcpSocket->waitForBytesWritten();
+        char buff[4*1024];
+        quint32 toFile;
         while (!file->atEnd())
         {
             toFile = file->read(buff, sizeof(buff)); // real size message
             sendStream << toFile;
+            qDebug() << toFile;
             sendStream.writeRawData(buff, toFile);
-        }
-        file->close();
-        mTcpSocket->write(block);
+            mTcpSocket->write(block);   // send binary file
+            mTcpSocket->waitForBytesWritten();
+        }        
+        file->close();       
     }
     delete file;
 }
@@ -174,31 +176,32 @@ void MyTcpClient::saveFile(QDataStream &stream)
 {
     QDateTime time = QDateTime::currentDateTime();
 
+
+    qint16 sizeReceiveFile;
+    stream >> sizeReceiveFile;
+    qDebug() << "saveFile(client):"<<sizeReceiveFile;
     QString nameFile;
     stream >> nameFile;
 
-    qint16 sizeReceiveFile;
-    qint16 sizeReceivedData = 0;
-    stream >> sizeReceiveFile;
+    qint32 sizeReceivedData = 0;
 
+    QString savePath = "../Downloads/" + nameFile + "[" + time.toString() + "]";
 
-    QString savePath = "../Downloads/" + nameFile;
-    savePath += "[" + time.toString() + "]";
-    QFile *File = new QFile(savePath);
-    File->open(QFile::WriteOnly);
+    QFile* file = new QFile(savePath);
+    file->open(QFile::WriteOnly);
 
     char block[1024];
-    qint16 toFile;
+    qint32 toFile;
 
-    while (true)
+    forever
     {
         stream >> toFile;
         stream.readRawData(block, toFile);
         sizeReceivedData += toFile;
-        File->write(block, toFile);
+        file->write(block, toFile);
         if (sizeReceivedData == sizeReceiveFile)
         {
-            File->close();
+            file->close();
             return;
         }
     }

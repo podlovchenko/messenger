@@ -22,7 +22,7 @@ MyTcpServer::~MyTcpServer()
 
     for (QHash<QString, QTcpSocket*>::iterator allClients = clients.begin(); allClients != clients.end(); allClients++)
     {
-        clients.take(allClients.key())->close();
+       clients.take(allClients.key())->close();
     }
 
 }
@@ -70,13 +70,14 @@ void MyTcpServer::slotRead() // считать сообщение от клие�
 
 	qint16 type;
 	stream >> type;     // определяем тип сообщения
+    qDebug() << "pClientSocket->bytesAvailable():"<<pClientSocket->bytesAvailable();
 
     if (type == MESSAGE_FILE)
     {
 		QHash<QString, QTcpSocket*>::iterator client = nameClient(pClientSocket);
 		QString name = client.key();
 		if (pClientSocket != interlocutors.value(name))
-			receiveFile(stream, interlocutors.value(name));
+            sendFile(stream, interlocutors.value(name));
 		return;
 	}
 
@@ -214,38 +215,43 @@ void MyTcpServer::showAllClients(QTcpSocket* pClientSocket, QString buff)
 	}
 }
 
-void MyTcpServer::receiveFile(QDataStream &stream, QTcpSocket* clientReceiver)
+void MyTcpServer::sendFile(QDataStream& stream, QTcpSocket* clientReceiver)
 {
+    qDebug() <<"here";
 	QByteArray block_to;
-	QDataStream stream_to(&block_to, QIODevice::ReadWrite);
+    QDataStream stream_to(&block_to, QIODevice::ReadWrite);
 
-    stream_to << quint16(MESSAGE_FILE);
+    stream_to << quint16(MESSAGE_FILE); // type
+
+    qint32 totalSize;
+    stream >> totalSize;
+    stream_to << totalSize;  // size
+    qDebug() << "sendFile(server):"<<totalSize;
+
     QString nameFile;
-
     stream >> nameFile;
-    stream_to << nameFile;
+    stream_to << nameFile;  // name of file
+    qDebug() << "sendFile(server):"<<nameFile;
 
-	qint16 sizeReceiveFile;
-	qint16 sizeReceivedData = 0;
 
-	stream >> sizeReceiveFile;
-	stream_to << sizeReceiveFile;
-
-    char block[1024];
-	qint16 toFile;
+    qint32 sizeSendData = 0;
+    char block[4*1024];
+    qint32 toFile;
     forever
     {
 		stream >> toFile;
+        qDebug() << "sendFile(server):"<< toFile;
 		stream_to << toFile;
-		stream.readRawData(block, toFile);
-		stream_to.writeRawData(block, toFile);
-		sizeReceivedData += toFile;
-        if (sizeReceivedData == sizeReceiveFile)
-        {
-			clientReceiver->write(block_to);
+        stream.readRawData(block, toFile);
+        stream_to.writeRawData(block, toFile);
+        sizeSendData += toFile;
+        qDebug() << sizeSendData;
+        clientReceiver->write(block_to);
+        if (sizeSendData == totalSize || toFile == 0)
+        {			         
 			return;
 		}
-	}
+    }
 }
 
 
