@@ -22,7 +22,7 @@ const size_t NAME_CLIENT = 1;
 const size_t NAME_INTERLOCUTOR = 2;
 const size_t DEL_INTERLOCUTOR = 3;
 
-
+const QString pathSave = "../Downloads/";
 
 class MyTcpClient : public QObject
 {

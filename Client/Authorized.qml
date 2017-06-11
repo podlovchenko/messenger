@@ -2,6 +2,21 @@ import QtQuick 2.0
 
 Rectangle
 {
+    function func_authClient()
+    {
+        if ( extern_client.verification(name.value) === true )
+        {
+            extern_client.setName(name.value);
+            root.title = name.value;
+            extern_client.sendString(name.value, 1);
+            name.value = " ";
+            name.focus = false;
+            root.authorized = true;
+        }
+        else
+            name.placeHolder = "Sorry, uncorrect name";
+    }
+
     id: authorized
     anchors.fill: parent
     visible: root.authorized ? false : true
@@ -16,6 +31,11 @@ Rectangle
         height: parent.height / 16
         placeHolder: "enter your name"
         textTitle: 0
+
+        onSend:
+        {
+            func_authClient();
+        }
     }
 
     ButtonUniversal
@@ -28,18 +48,7 @@ Rectangle
         text: "Authorized"
         onClicked:
         {           
-            if ( extern_client.verification(name.value) === true )
-            {
-                extern_client.setName(name.value);
-                root.title = name.value;
-                extern_client.sendString(name.value, 1);
-                name.value = " ";
-                name.focus = false;
-                root.authorized = true;
-            }
-            else
-                name.placeHolder = "Sorry, uncorrect name";
-
+            func_authClient();
         }
     }
 

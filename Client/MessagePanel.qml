@@ -9,11 +9,14 @@ Item
     ButtonUniversal
     {
         id: addFiles
-        height: parent.height / 8
-        width:  parent.width / 8
-        radius: parent.height / 8
+        height: parent.height / 14
+        width:  parent.width / 14
+        radius: height
+        textfont: 14
         anchors.bottom: parent.bottom
         anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.bottomMargin: parent.height / 32
         nonactiveColor: "red"
         visible: root.choose ? false : true
         text: "Send"
@@ -47,6 +50,13 @@ Item
         }
     }
 
+    function func_sendMessage()
+    {
+        extern_client.sendString(message.value, 0);
+        message.value = " ";
+        message.focus = false;
+    }
+
     Rectangle
     {
         id: addMessege
@@ -54,6 +64,7 @@ Item
         width: parent.width * 5 / 8
         anchors.bottom: parent.bottom
         anchors.left: addFiles.right
+        anchors.leftMargin: 10
         color: "orange"
 
         TextForm
@@ -62,7 +73,12 @@ Item
             anchors.fill: parent
             placeHolder: "your mind..."
             textTitle: 1
-        }
+
+            onSend:
+            {
+                func_sendMessage();
+            }
+        }      
     }
 
     ButtonUniversal
@@ -70,16 +86,14 @@ Item
         id: sendMessege
         height: parent.height / 14
         width: parent.width / 6
-        y: addFiles.y + addFiles.height / 4
+        y: addMessege.y + addMessege.height / 4
         anchors.left: addMessege.right
         anchors.leftMargin: 10
 
         text: "Send"
         onClicked:
         {
-            extern_client.sendString(message.value, 0);
-            message.value = " ";
-            message.focus = false;
+            func_sendMessage();
         }
     }
 }

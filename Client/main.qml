@@ -48,7 +48,7 @@ ApplicationWindow
                     top: parent.top
                 }
 
-                height: parent.height * 6 / 8
+                height: parent.height - parent.height / 8 - 10
 
             }
 

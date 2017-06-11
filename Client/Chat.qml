@@ -1,69 +1,74 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.4
 
 Item
 {
     id: root
 
 
-    ListView
+    ScrollView
     {
-        id: listView1      
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: 5
-        delegate: Item
+        anchors.fill: parent
+        ListView
         {
-            id: message
-            //anchors.left: parent.left
-            //anchors.right: parent.right
-            height: oneMessage.contentHeight
-            width: parent.width / 2
-            Component.onCompleted:
+            id: listView1
+            anchors.fill: parent
+            spacing: 5
+            delegate: Item
             {
-                if ( whoSender == true )
+                id: message
+                property string color
+                height: oneMessage.contentHeight + 20
+                width: parent.width / 2
+                Component.onCompleted:
                 {
-                     anchors.right = parent.right
+                    if ( whoSender == true )
+                    {
+                         anchors.right = parent.right
+                         message.color = "lightgreen"
+                    }
+                    else
+                    {
+                        anchors.left = parent.left
+                        message.color = "white"
+                    }
                 }
-                else
+
+                Rectangle
                 {
-                    anchors.left = parent.left
-                }
-            }
-            Rectangle
-            {
-                id: a
-                anchors.fill: parent
-                color: "transparent"
-                Text
-                {
-                    id: oneMessage
+                    id: messageText
                     anchors.fill: parent
-                    text: idshnik
-                    anchors.topMargin: 15
-                    //verticalAlignment:   Text.AlignVCenter
-                    //horizontalAlignment: Text.AlignHCenter
-                    wrapMode : Text.Wrap
+                    color: message.color
+                    border.width: 2
+                    Text
+                    {
+                        id: oneMessage
+                        anchors.fill: parent
+                        anchors.topMargin: 10
+                        anchors.bottomMargin: 10
+                        anchors.leftMargin: 5
+                        text: idshnik
+                        font.pixelSize: 18
+                        wrapMode : Text.Wrap
+                    }
                 }
+
+
             }
 
+            onCountChanged:
+            {
+               var newIndex = count - 1 // last index
+               positionViewAtEnd()
+               currentIndex = newIndex
+            }
 
-        }
-
-        onCountChanged:
-        {
-           var newIndex = count - 1 // last index
-           positionViewAtEnd()
-           currentIndex = newIndex
-        }
-
-        model: ListModel
-        {
-            id: listModel
+            model: ListModel
+            {
+                id: listModel
+            }
         }
     }
-
     Connections
     {
         target: extern_client

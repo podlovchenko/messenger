@@ -143,69 +143,68 @@ void MyTcpClient::sendString(const QString& str, int type)  // отправля�
 	mTcpSocket->write(block);
 }
 
+
 void MyTcpClient::sendFile(QString path)
 {
     path.remove("file://");
     QFile* file = new QFile(path);
-    qDebug() << path;
-    if (file->open(QFile::ReadOnly))
+    file->open(QFile::ReadOnly);
+
+    QByteArray block;
+    QDataStream sendStream(&block, QIODevice::WriteOnly);
+
+    quint64 size = file->size();
+    sendStream << quint16(MESSAGE_FILE)<< quint64(size) << QFileInfo(file->fileName()).fileName();
+
+    mTcpSocket->write(block);
+    mTcpSocket->flush();
+
+    QDataStream read(file);
+
+    quint64 lBytes = 0;
+
+    char *buff = (char*)malloc(sizeof(char) * 1024);
+    buff[1023] = '\0';
+    while(!read.atEnd())
     {
-        QByteArray block;
-        QDataStream sendStream(&block, QIODevice::WriteOnly);
-        quint32 size = file->size();
-        sendStream << quint16(MESSAGE_FILE)<< quint32(size) << QFileInfo(file->fileName()).fileName();
-        mTcpSocket->write(block); // send size, name
-        mTcpSocket->waitForBytesWritten();
-        char buff[4*1024];
-        quint32 toFile;
-        while (!file->atEnd())
+        int readData = read.readRawData(buff, sizeof(char) * 1023);
+        QByteArray blockData(buff, sizeof(char) * readData);
+
+        lBytes += mTcpSocket->write(blockData, sizeof(char) * readData);
+        mTcpSocket->flush();
+        if (lBytes == -1)
         {
-            toFile = file->read(buff, sizeof(buff)); // real size message
-            sendStream << toFile;
-            qDebug() << toFile;
-            sendStream.writeRawData(buff, toFile);
-            mTcpSocket->write(block);   // send binary file
-            mTcpSocket->waitForBytesWritten();
-        }        
-        file->close();       
+            qWarning() << "Error";
+            mTcpSocket->close();
+            return;
+        }
     }
-    delete file;
+    free((void*)buff);
 }
 
 void MyTcpClient::saveFile(QDataStream &stream)
 {
-    QDateTime time = QDateTime::currentDateTime();
-
-
-    qint16 sizeReceiveFile;
-    stream >> sizeReceiveFile;
-    qDebug() << "saveFile(client):"<<sizeReceiveFile;
+    quint64 lBytesDone = 0;
+    quint64 lSize = 0;
+    quint64 lBytes = 0;
     QString nameFile;
-    stream >> nameFile;
 
-    qint32 sizeReceivedData = 0;
-
-    QString savePath = "../Downloads/" + nameFile + "[" + time.toString() + "]";
-
-    QFile* file = new QFile(savePath);
+    stream >> lSize >> nameFile;
+    QFile* file = new QFile(pathSave + nameFile);
     file->open(QFile::WriteOnly);
+    QDataStream saveStream(file);
 
-    char block[1024];
-    qint32 toFile;
-
-    forever
+    while (lBytesDone < lSize)
     {
-        stream >> toFile;
-        stream.readRawData(block, toFile);
-        sizeReceivedData += toFile;
-        file->write(block, toFile);
-        if (sizeReceivedData == sizeReceiveFile)
-        {
-            file->close();
-            return;
-        }
+        lBytes = 0;
+        //while (lBytes == 0)
+        //    lBytes = mTcpSocket->waitForReadyRead(-1);
+        QByteArray block = mTcpSocket->readAll();
+        saveStream.writeRawData(block.data(), block.size());
+        lBytesDone += block.size();
     }
 }
+
 
 void MyTcpClient::setName(QString client_name)
 {

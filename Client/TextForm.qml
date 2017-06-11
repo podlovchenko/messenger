@@ -13,6 +13,8 @@ FocusScope
 
     property int textTitle: 1
 
+    signal  send()
+
     Rectangle
     {
         id: background;
@@ -48,7 +50,19 @@ FocusScope
                             textInput.verticalAlignment   = TextInput.AlignVCenter;
                             textInput.horizontalAlignment = TextInput.AlignHCenter;
                         }
+
+
                 }
+
+                Keys.onPressed:
+                {
+                    if(event.key === 16777220)
+                    {
+                       focusScope.send();
+                    }
+                }
+
+
 
             }
 
